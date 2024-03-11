@@ -12,6 +12,7 @@
   </a> 】
 </p>
 
+<a href="https://trendshift.io/repositories/3709" target="_blank"><img src="https://trendshift.io/api/badge/repositories/3709" alt="ByteByteGoHq%2Fsystem-design-101 | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 # System Design 101
 
@@ -153,33 +154,48 @@ Architecture styles define how different components of an application programmin
 
 ### REST API vs. GraphQL
 
-The diagram below shows a quick comparison between REST and GraphQL.
+When it comes to API design, REST and GraphQL each have their own strengths and weaknesses.
 
+The diagram below shows a quick comparison between REST and GraphQL.
 
 <p>
   <img src="images/graphQL.jpg">
 </p>
 
-- GraphQL is a query language for APIs developed by Meta. It provides a complete description of the data in the API and gives clients the power to ask for exactly what they need.
+REST
 
-- GraphQL servers sit in between the client and the backend services.
-GraphQL can aggregate multiple REST requests into one query. GraphQL server organizes the resources in a graph.
+- Uses standard HTTP methods like GET, POST, PUT, DELETE for CRUD operations.
+- Works well when you need simple, uniform interfaces between separate services/applications.
+- Caching strategies are straightforward to implement.
+- The downside is it may require multiple roundtrips to assemble related data from separate endpoints.
 
-- GraphQL supports queries, mutations (applying data modifications to resources), and subscriptions (receiving notifications on schema modifications).
+GraphQL
+
+- Provides a single endpoint for clients to query for precisely the data they need.
+- Clients specify the exact fields required in nested queries, and the server returns optimized payloads containing just those fields.
+- Supports Mutations for modifying data and Subscriptions for real-time notifications.
+- Great for aggregating data from multiple sources and works well with rapidly evolving frontend requirements.
+- However, it shifts complexity to the client side and can allow abusive queries if not properly safeguarded
+- Caching strategies can be more complicated than REST.
+
+The best choice between REST and GraphQL depends on the specific requirements of the application and development team. GraphQL is a good fit for complex or frequently changing frontend needs, while REST suits applications where simple and consistent contracts are preferred.
+
+Neither API approach is a silver bullet. Carefully evaluating requirements and tradeoffs is important to pick the right style. Both REST and GraphQL are valid options for exposing data and powering modern applications.
+
 
 ### How does gRPC work?
-
-<p>
-  <img src="images/grpc.jpg">
-</p>
 
 RPC (Remote Procedure Call) is called “**remote**” because it enables communications between remote services when services are deployed to different servers under microservice architecture. From the user’s point of view, it acts like a local function call.
 
 The diagram below illustrates the overall data flow for **gRPC**.
 
+<p>
+  <img src="images/grpc.jpg">
+</p>
+
 Step 1: A REST call is made from the client. The request body is usually in JSON format.
 
-Steps 2 - 4: The order service (gRPC client) receives the REST call, transforms it, and makes an RPC call to the payment service. gPRC encodes the **client stub** into a binary format and sends it to the low-level transport layer.
+Steps 2 - 4: The order service (gRPC client) receives the REST call, transforms it, and makes an RPC call to the payment service. gRPC encodes the **client stub** into a binary format and sends it to the low-level transport layer.
 
 Step 5: gRPC sends the packets over the network via HTTP2. Because of binary encoding and network optimizations, gRPC is said to be 5X faster than JSON.
 
@@ -241,7 +257,7 @@ Synchronous logging deals with the disk for every call and can slow down the sys
 
 Caching
 
-We can cache frequently accessed data into a cache. The client can query the cache first instead of visiting the database directly. If there is a cache miss, the client can query from the database. Caches like Redis store data in memory, so the data access is much faster than the database.
+We can store frequently accessed data into a cache. The client can query the cache first instead of visiting the database directly. If there is a cache miss, the client can query from the database. Caches like Redis store data in memory, so the data access is much faster than the database.
 
 Payload Compression
 
@@ -297,11 +313,11 @@ The diagram below shows the differences between code-first development and API-f
 </p>
 
 
-- Microservices increase system complexity We have separate services to serve different functions of the system. While this kind of architecture facilitates decoupling and segregation of duty, we need to handle the various communications among services. 
+- Microservices increase system complexity and we have separate services to serve different functions of the system. While this kind of architecture facilitates decoupling and segregation of duty, we need to handle the various communications among services. 
 
 It is better to think through the system's complexity before writing the code and carefully defining the boundaries of the services.
 
-- Separate functional teams need to speak the same language The dedicated functional teams are only responsible for their own components and services. It is recommended that the organization speak the same language via API design. 
+- Separate functional teams need to speak the same language and the dedicated functional teams are only responsible for their own components and services. It is recommended that the organization speak the same language via API design. 
 
 We can mock requests and responses to validate the API design before writing code.
 
@@ -367,11 +383,11 @@ Note that API design is not just URL path design. Most of the time, we need to c
 
 How is data sent over the network? Why do we need so many layers in the OSI model?
 
+The diagram below shows how data is encapsulated and de-encapsulated when transmitting over the network.
+
 <p>
   <img src="images/osi model.jpeg" />
 </p>
-
-The diagram below shows how data is encapsulated and de-encapsulated when transmitting over the network.
 
 Step 1: When Device A sends data to Device B over the network via the HTTP protocol, it is first added an HTTP header at the application layer.
 
@@ -399,18 +415,18 @@ A forward proxy is a server that sits between user devices and the internet.
 
 A forward proxy is commonly used for: 
 
-1. Protect clients
-2. Avoid browsing restrictions
-3. Block access to certain content
+1. Protecting clients
+2. Circumventing browsing restrictions
+3. Blocking access to certain content
 
 A reverse proxy is a server that accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
 
 A reverse proxy is good for:
 
-1. Protect servers
+1. Protecting servers
 2. Load balancing
-3. Cache static contents
-4. Encrypt and decrypt SSL communications
+3. Caching static contents
+4. Encrypting and decrypting SSL communications
 
 ### What are the common load-balancing algorithms?
 
@@ -471,7 +487,7 @@ URL stands for Uniform Resource Locator, the key concept of HTTP. It is the addr
 
 URN stands for Uniform Resource Name. It uses the urn scheme. URNs cannot be used to locate a resource. A simple example given in the diagram is composed of a namespace and a namespace-specific string. 
 
-If you would like to learn more detail on the subject, I would recommend W3C’s clarification.
+If you would like to learn more detail on the subject, I would recommend [W3C’s clarification](https://www.w3.org/TR/uri-clarification/).
 
 ## CI/CD
 
@@ -870,7 +886,7 @@ Below you will find a diagram showing the microservice tech stack, both for the 
 - NGinx is a common choice for load balancers. Cloudflare provides CDN (Content Delivery Network). 
 - API Gateway - We can use spring boot for the gateway, and use Eureka/Zookeeper for service discovery.
 - The microservices are deployed on clouds. We have options among AWS, Microsoft Azure, or Google GCP.
-Cache and Full-text Search - Redis is a common choice for caching key-value pairs. ElasticSearch is used for full-text search.
+Cache and Full-text Search - Redis is a common choice for caching key-value pairs. Elasticsearch is used for full-text search.
 - Communications - For services to talk to each other, we can use messaging infra Kafka or RPC.
 - Persistence - We can use MySQL or PostgreSQL for a relational database, and Amazon S3 for object store. We can also use Cassandra for the wide-column store if necessary.
 - Management & Monitoring - To manage so many microservices, the common Ops tools include Prometheus, Elastic Stack, and Kubernetes.
@@ -977,7 +993,7 @@ Step 4: The issuing banks confirm the correctness of the clearing files, and tra
  
 Step 5: The acquiring bank then transfers money to the merchant’s bank. 
  
-Step 4: The card network clears the transactions from different acquiring banks. Clearing is a process in which mutual offset transactions are netted, so the number of total transactions is reduced.
+Step 4: The card network clears up the transactions from different acquiring banks. Clearing is a process in which mutual offset transactions are netted, so the number of total transactions is reduced.
  
 In the process, the card network takes on the burden of talking to each bank and receives service fees in return.
 
@@ -1103,6 +1119,7 @@ There are 3 components in Docker architecture:
     The Docker daemon listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes. 
 
 - Docker registry 
+
     A Docker registry stores Docker images. Docker Hub is a public registry that anyone can use. 
 
 Let’s take the “docker run” command as an example. 
@@ -1381,7 +1398,7 @@ From simple to complex, here is my understanding of user identity management:
 
 - JWT is a standard way of representing tokens. This information can be verified and trusted because it is digitally signed. Since JWT contains the signature, there is no need to save session information on the server side.
 
-- By using SSO (single sign-on), you can sign on only once and log in to multiple websites. It uses CAS (central authentication service) to maintain cross-site information
+- By using SSO (single sign-on), you can sign on only once and log in to multiple websites. It uses CAS (central authentication service) to maintain cross-site information.
 
 - By using OAuth 2.0, you can authorize one website to access your information on another website.
 
@@ -1446,7 +1463,7 @@ Google Authenticator is a software-based authenticator that implements a two-ste
 
 There are two stages involved:
 
-- Stage 1 - The user enables Google two-step verification 
+- Stage 1 - The user enables Google two-step verification. 
 - Stage 2 - The user uses the authenticator for logging in, etc.
 
 Let’s look at these stages.
@@ -1571,14 +1588,14 @@ In Microrepo, dependencies are controlled within each repository. Businesses cho
 
 Monorepo has a standard for check-ins. Google's code review process is famously known for setting a high bar, ensuring a coherent quality standard for Monorepo, regardless of the business. 
 
-Microrepo can either set its own standard or adopt a shared standard by incorporating best practices. It can scale faster for business, but the code quality might be a bit different. 
-Google engineers built Bazel, and Meta built Buck. There are other open-source tools available, including Nix, Lerna, and others. 
+Microrepo can either set its own standard or adopt a shared standard by incorporating the best practices. It can scale faster for business, but the code quality might be a bit different. 
+Google engineers built Bazel, and Meta built Buck. There are other open-source tools available, including Nx, Lerna, and others. 
 
 Over the years, Microrepo has had more supported tools, including Maven and Gradle for Java, NPM for NodeJS, and CMake for C/C++, among others. 
 
 ### How will you design the Stack Overflow website? 
 
-If your answer is on-premise servers and monolith (on the right), you would likely fail the interview, but that's how it is built in reality!
+If your answer is on-premise servers and monolith (on the bottom of the following image), you would likely fail the interview, but that's how it is built in reality!
 
 <p>
   <img src="images/stackoverflow.jpg" />
@@ -1587,7 +1604,7 @@ If your answer is on-premise servers and monolith (on the right), you would like
 
 **What people think it should look like**
 
-The interviewer is probably expecting something on the left side.
+The interviewer is probably expecting something like the top portion of the picture.
 
 - Microservice is used to decompose the system into small components.
 - Each service has its own database. Use cache heavily.
